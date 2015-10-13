@@ -15,4 +15,26 @@
 /*   See the License for the specific language governing permissions and       */
 /*   limitations under the License.                                            */
 
+static int 
+is_escaped(char c)
+{
+    switch (c) {
+    case '[':
+    case ']':
+    case '}':
+    case '{':
+    case '^':
+    case '$':
+    case '/':
+    case '\\':
+    case '@':
+    case '<':
+    case '>':
+        return 1;
+        break;
+    default:
+        return 0;
+        break;
+    }
+}
 
