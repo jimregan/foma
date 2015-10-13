@@ -22,13 +22,15 @@
 
 typedef struct {
     char *buf;
-    int length;
-    int bytes;
-    int start;
-    int end;
+    unsigned int length;
+    unsigned int bytes;
+    unsigned int start;
+    unsigned int end;
+    unsigned int cpos;
+    unsigned int lpos;
 } rbuf;
 
-rbuf* buf_alloc (int length)
+rbuf* buf_alloc (unsigned int length)
 {
     rbuf *buf = xxcalloc(1, sizeof(rbuf));
     buf->length = length + 1;
@@ -38,7 +40,7 @@ rbuf* buf_alloc (int length)
     buf->buf = xxcalloc(buf->bytes, 1);
 }
 
-void buf_free (rbuf buf)
+void buf_free (rbuf* buf)
 {
     if(buf) {
         if(buf->buf) {
@@ -47,3 +49,24 @@ void buf_free (rbuf buf)
         xxfree(buf);
     }
 }
+
+char* buf_last (rbuf* buf)
+{
+    if(buf->lpos != 0) {
+         return (buf->buf + (buf->lpos - 1));
+    } else {
+         return (buf->buf + (buf->bytes - 1));
+    }
+}
+
+void buf_set_pos (rbuf* buf, unsigned int pos)
+{
+     buf->cpos = pos;
+}
+
+unsigned int buf_get_pos (rbuf* buf)
+{
+     return buf->cpos;
+}
+
+
