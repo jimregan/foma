@@ -15,10 +15,15 @@
 /*   See the License for the specific language governing permissions and       */
 /*   limitations under the License.                                            */
 
-#include "fomalib.h"
+//#include "fomalib.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 /* http://tools.ietf.org/html/rfc3629 */
 #define UTF8_MAX_LEN 4
+
+#define xxcalloc calloc
+#define xxfree free
 
 typedef struct {
     char *buf;
@@ -32,12 +37,14 @@ typedef struct {
 
 rbuf* buf_alloc (unsigned int length)
 {
-    rbuf *buf = xxcalloc(1, sizeof(rbuf));
+    rbuf *buf = (rbuf *) xxcalloc(1, sizeof(rbuf));
     buf->length = length + 1;
     buf->bytes = (length * UTF8_MAX_LEN) + 1;
     buf->start = 0;
     buf->end = 0;
-    buf->buf = xxcalloc(buf->bytes, 1);
+    buf->cpos = 0;
+    buf->lpos = 0;
+    buf->buf = (char *) xxcalloc(buf->bytes, sizeof(char));
 }
 
 void buf_free (rbuf* buf)
@@ -59,6 +66,7 @@ char* buf_last (rbuf* buf)
     }
 }
 
+/* blech */
 void buf_set_pos (rbuf* buf, unsigned int pos)
 {
      buf->cpos = pos;
@@ -69,4 +77,28 @@ unsigned int buf_get_pos (rbuf* buf)
      return buf->cpos;
 }
 
+unsigned int buf_diff_prev (rbuf* buf, unsigned int pos)
+{
+     if(pos <= buf->cpos) {
+         return (buf->cpos - pos);
+     } else {
+         return (buf->cpos + buf->bytes - pos);
+     }
+}
 
+int buf_empty (rbuf* buf)
+{
+     return (buf->cpos == buf->lpos) ? 1 : 0;
+}
+
+int buf_has_space (rbuf* buf)
+{
+    return ((buf->end + 1) % buf->bytes - buf->start - 1);
+}
+
+int main (int argc, char** argv)
+{
+    rbuf* test = buf_alloc(10);
+    printf("Has space: %d\n", buf_has_space(test));
+    printf("Is empty: %d\n", buf_empty(test));
+}
