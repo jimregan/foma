@@ -52,8 +52,10 @@ void buf_free (rbuf* buf)
     if(buf) {
         if(buf->buf) {
             xxfree(buf->buf);
+            buf->buf = NULL;
         }
         xxfree(buf);
+        buf = NULL;
     }
 }
 
