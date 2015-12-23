@@ -26,13 +26,13 @@
 #define xxfree free
 
 typedef struct {
-    char *buf;
     unsigned int length;
     unsigned int bytes;
     unsigned int start;
     unsigned int end;
     unsigned int cpos;
     unsigned int lpos;
+    char *buf;
 } rbuf;
 
 rbuf* buf_alloc (unsigned int length)
