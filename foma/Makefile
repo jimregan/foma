@@ -14,7 +14,7 @@ LEXCLEX = flex -8 --prefix=lexc
 LEXIFACE = flex -8 --prefix=interface
 LEXCMATRIX = flex -8 --prefix=cmatrix
 RM = /bin/rm -f
-LDFLAGS = -lreadline -lz -ltermcap
+LDFLAGS = -lreadline -lz -lncurses
 FLOOKUPLDFLAGS = libfoma.a -lz
 CFLAGS = -O3 -Wall -D_GNU_SOURCE -std=c99 -fvisibility=hidden -fPIC -DSVN_REV=$(SVN_REV)
 FOMAOBJS = foma.o stack.o iface.o lex.interface.o
